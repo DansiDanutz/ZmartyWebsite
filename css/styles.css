@@ -523,6 +523,83 @@ section {
 }
 
 /* AI Agents */
+/* AI Models Showcase */
+.ai-models-showcase {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin: 50px 0;
+    flex-wrap: wrap;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ai-model-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.ai-model-badge:hover {
+    transform: translateY(-5px);
+}
+
+.model-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+}
+
+.model-logo:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.model-logo.claude {
+    background: linear-gradient(135deg, #CC9B7A 0%, #D4A574 100%);
+}
+
+.model-logo.gpt {
+    background: linear-gradient(135deg, #10a37f 0%, #1a7f64 100%);
+}
+
+.model-logo.gemini {
+    background: linear-gradient(135deg, #4285f4 0%, #34a853 50%, #fbbc04 75%, #ea4335 100%);
+}
+
+.model-logo.grok {
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.model-letter {
+    font-size: 28px;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.model-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
 .agents-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -966,6 +1043,24 @@ section {
 
     .agents-grid {
         grid-template-columns: 1fr;
+    }
+
+    .ai-models-showcase {
+        gap: 25px;
+        padding: 30px 20px;
+    }
+
+    .model-logo {
+        width: 60px;
+        height: 60px;
+    }
+
+    .model-letter {
+        font-size: 22px;
+    }
+
+    .model-name {
+        font-size: 12px;
     }
 
     .pricing-grid {
