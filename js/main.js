@@ -1,5 +1,60 @@
-// Zmarty.me - Main JavaScript
-// Smooth scrolling, animations, and interactions
+// Zmarty.me - Enhanced JavaScript with Theme System
+// Smooth scrolling, animations, theme management, and interactions
+
+// Theme Management System
+class ThemeManager {
+    constructor() {
+        this.currentTheme = this.getStoredTheme() || 'dark';
+        this.initTheme();
+        this.bindEvents();
+    }
+
+    getStoredTheme() {
+        return localStorage.getItem('zmarty-theme');
+    }
+
+    setStoredTheme(theme) {
+        localStorage.setItem('zmarty-theme', theme);
+    }
+
+    initTheme() {
+        document.documentElement.setAttribute('data-theme', this.currentTheme);
+        this.updateThemeToggle();
+    }
+
+    updateThemeToggle() {
+        const toggle = document.querySelector('#themeToggle');
+        if (toggle) {
+            toggle.setAttribute('aria-label', `Switch to ${this.currentTheme === 'dark' ? 'light' : 'dark'} theme`);
+        }
+    }
+
+    toggleTheme() {
+        this.currentTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', this.currentTheme);
+        this.setStoredTheme(this.currentTheme);
+        this.updateThemeToggle();
+        
+        // Add transition class for smooth theme change
+        document.body.classList.add('theme-transitioning');
+        setTimeout(() => {
+            document.body.classList.remove('theme-transitioning');
+        }, 300);
+    }
+
+    bindEvents() {
+        const themeToggle = document.querySelector('#themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.toggleTheme();
+            });
+        }
+    }
+}
+
+// Initialize theme manager
+const themeManager = new ThemeManager();
 
 // Smooth scroll for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -52,18 +107,21 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Navbar scroll effect
+// Navbar scroll effect with theme support
 let lastScroll = 0;
 const navbar = document.querySelector('.navbar');
 
 window.addEventListener('scroll', () => {
     const currentScroll = window.pageYOffset;
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const bgColor = isDark ? 'rgba(10, 14, 26, 0.95)' : 'rgba(248, 250, 252, 0.95)';
+    const bgColorLight = isDark ? 'rgba(10, 14, 26, 0.85)' : 'rgba(248, 250, 252, 0.85)';
 
     if (currentScroll > 100) {
-        navbar.style.background = 'rgba(15, 23, 42, 0.95)';
-        navbar.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+        navbar.style.background = bgColor;
+        navbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
     } else {
-        navbar.style.background = 'rgba(15, 23, 42, 0.8)';
+        navbar.style.background = bgColorLight;
         navbar.style.boxShadow = 'none';
     }
 
