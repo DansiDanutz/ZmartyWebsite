@@ -600,71 +600,107 @@
     <section class="referral-program">
         <div class="container">
             <div class="section-header">
-                <h2>🎁 Earn Credits by Sharing Zmarty</h2>
-                <p>Turn your network into credits. Get rewarded when your friends join!</p>
+                <span class="section-badge">💰 Referral Program</span>
+                <h2>Turn Your Network Into Credits</h2>
+                <p>Share Zmarty with friends and earn rewards. The more you share, the more you earn!</p>
             </div>
 
-            <div class="referral-hero">
-                <div class="referral-content">
-                    <h3>How the Referral Program Works</h3>
-                    <div class="referral-steps">
-                        <div class="referral-step">
+            <!-- How It Works -->
+            <div class="referral-how-it-works">
+                <h3 class="subsection-title">How It Works</h3>
+                <div class="referral-steps">
+                    <div class="referral-step-card">
+                        <div class="step-icon-wrapper">
                             <div class="step-number">1</div>
-                            <div class="step-content">
-                                <h4>Share Your Link</h4>
-                                <p>Get your unique referral link from your dashboard</p>
-                            </div>
+                            <svg class="step-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                                <polyline points="16 6 12 2 8 6"></polyline>
+                                <line x1="12" y1="2" x2="12" y2="15"></line>
+                            </svg>
                         </div>
-                        <div class="referral-step">
+                        <h4>Share Your Link</h4>
+                        <p>Get your unique referral link from your dashboard and share it anywhere</p>
+                    </div>
+
+                    <div class="referral-step-card">
+                        <div class="step-icon-wrapper">
                             <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h4>Friend Signs Up</h4>
-                                <p>They create an account using your referral link</p>
-                            </div>
+                            <svg class="step-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="8.5" cy="7" r="4"></circle>
+                                <polyline points="17 11 19 13 23 9"></polyline>
+                            </svg>
                         </div>
-                        <div class="referral-step">
+                        <h4>Friend Joins</h4>
+                        <p>Your friend creates an account using your referral link</p>
+                    </div>
+
+                    <div class="referral-step-card">
+                        <div class="step-icon-wrapper">
                             <div class="step-number">3</div>
-                            <div class="step-content">
-                                <h4>They Upgrade</h4>
-                                <p>When they purchase Gold ($19) or Premium ($50)</p>
-                            </div>
+                            <svg class="step-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                                <line x1="2" y1="10" x2="22" y2="10"></line>
+                            </svg>
                         </div>
-                        <div class="referral-step">
+                        <h4>They Upgrade</h4>
+                        <p>When they purchase Gold ($19) or Premium ($50) subscription</p>
+                    </div>
+
+                    <div class="referral-step-card highlight">
+                        <div class="step-icon-wrapper">
                             <div class="step-number">4</div>
-                            <div class="step-content">
-                                <h4>You Get Credits!</h4>
-                                <p>Instant credits added to your account</p>
-                            </div>
+                            <svg class="step-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
                         </div>
+                        <h4>You Earn Credits!</h4>
+                        <p>Instant credits added to your account automatically</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Rewards Preview -->
+            <div class="rewards-preview">
+                <div class="reward-quick-card">
+                    <div class="reward-quick-header">
+                        <span class="reward-tier-label">Gold Tier</span>
+                        <span class="reward-tier-price">$19/mo</span>
+                    </div>
+                    <div class="reward-quick-amount">
+                        <span class="credit-number">500</span>
+                        <span class="credit-label">Credits</span>
                     </div>
                 </div>
 
-                <div class="referral-rewards">
-                    <div class="reward-card">
-                        <div class="reward-icon">💰</div>
-                        <h4>Gold Tier Referral</h4>
-                        <div class="reward-amount">500 Credits</div>
-                        <p>When your referral buys Gold ($19/mo)</p>
+                <div class="reward-quick-card premium">
+                    <div class="reward-quick-badge">Best Value</div>
+                    <div class="reward-quick-header">
+                        <span class="reward-tier-label">Premium Tier</span>
+                        <span class="reward-tier-price">$50/mo</span>
                     </div>
-                    <div class="reward-card featured">
-                        <div class="popular-badge">Best Value</div>
-                        <div class="reward-icon">💎</div>
-                        <h4>Premium Tier Referral</h4>
-                        <div class="reward-amount">1,500 Credits</div>
-                        <p>When your referral buys Premium ($50/mo)</p>
+                    <div class="reward-quick-amount">
+                        <span class="credit-number">1,500</span>
+                        <span class="credit-label">Credits</span>
                     </div>
-                    <div class="reward-card">
-                        <div class="reward-icon">🚀</div>
-                        <h4>Unlimited Earning</h4>
-                        <div class="reward-amount">No Limit</div>
-                        <p>Refer as many users as you want!</p>
+                </div>
+
+                <div class="reward-quick-card unlimited">
+                    <div class="reward-quick-header">
+                        <span class="reward-tier-label">No Limits</span>
+                        <span class="reward-tier-price">∞</span>
+                    </div>
+                    <div class="reward-quick-amount">
+                        <span class="credit-number">Unlimited</span>
+                        <span class="credit-label">Referrals</span>
                     </div>
                 </div>
             </div>
 
             <!-- Gamification Levels -->
             <div class="referral-game">
-                <h3 style="text-align: center; margin-bottom: 50px; font-size: 32px;">🎮 Level Up Your Referral Game</h3>
+                <h3 class="subsection-title">🎮 Level Up Your Referral Game</h3>
+                <p class="subsection-description">Climb the ranks and unlock bigger rewards. The more you refer, the more you earn!</p>
                 <div class="game-levels">
                     <div class="game-level">
                         <div class="level-badge bronze">🥉</div>
