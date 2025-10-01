@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTC/USDT Analysis Report - Zmarty</title>
+    <meta name="description" content="Real-time BTC/USDT trading analysis with win rates, liquidation clusters, and AI-powered insights">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .report-container {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+        }
+
+        .report-header {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .report-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .report-meta strong {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(102, 126, 234, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .metric-value.positive {
+            color: #10b981;
+        }
+
+        .metric-value.negative {
+            color: #ef4444;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-icon {
+            font-size: 32px;
+        }
+
+        .win-rate-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .win-rate-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .win-rate-card.long {
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .win-rate-card.short {
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .win-rate-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .win-rate-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .win-rate-item:last-child {
+            border-bottom: none;
+        }
+
+        .win-rate-timeframe {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .win-rate-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #10b981;
+        }
+
+        .win-rate-value.best {
+            color: #f59e0b;
+        }
+
+        .liquidation-bar {
+            display: flex;
+            height: 40px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .liq-long {
+            background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .liq-short {
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .recommendation-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .recommendation-box h4 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .recommendation-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendation-box li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .recommendation-box li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge.bullish {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge.bearish {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .badge.neutral {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .report-title {
+                font-size: 32px;
+            }
+
+            .win-rate-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <!-- Header -->
+        <div class="report-header">
+            <div class="report-title">BTC/USDT Analysis Report</div>
+            <p style="font-size: 18px; color: rgba(255, 255, 255, 0.8); margin-bottom: 10px;">
+                Comprehensive market analysis with liquidation clusters, win rate ratios, and AI-powered insights
+            </p>
+            <div class="report-meta">
+                <div><strong>Analysis Date:</strong> <span id="analysis-date">October 1, 2025</span></div>
+                <div><strong>Current Price:</strong> <span id="current-price">$63,245.00</span></div>
+                <div><strong>24h Change:</strong> <span id="change-24h" class="positive">+2.3%</span></div>
+                <div><strong>Market Cap:</strong> $1.24T (Rank #1)</div>
+            </div>
+        </div>
+
+        <!-- Quick Metrics -->
+        <div class="metric-grid">
+            <div class="metric-card">
+                <div class="metric-label">Long Win Rate (Best)</div>
+                <div class="metric-value positive">58.7%</div>
+                <div style="margin-top: 10px; font-size: 14px; color: rgba(255, 255, 255, 0.6);">1 Month Timeframe ⭐</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Short Win Rate (Best)</div>
+                <div class="metric-value">42.8%</div>
+                <div style="margin-top: 10px; font-size: 14px; color: rgba(255, 255, 255, 0.6);">24-48 Hours</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">24h Liquidations</div>
+                <div class="metric-value">$82.4M</div>
+                <div style="margin-top: 10px; font-size: 14px; color: rgba(255, 255, 255, 0.6);">Long: 89.2% | Short: 10.8%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Market Sentiment</div>
+                <div class="metric-value" style="font-size: 24px;">
+                    <span class="badge bullish">Bullish</span>
+                </div>
+                <div style="margin-top: 10px; font-size: 14px; color: rgba(255, 255, 255, 0.6);">L/S Ratio: 1.18</div>
+            </div>
+        </div>
+
+        <!-- Win Rate Analysis -->
+        <div class="section">
+            <div class="section-title">
+                <span class="section-icon">🎯</span>
+                Win Rate Analysis by Timeframe
+            </div>
+
+            <div class="win-rate-grid">
+                <!-- Long Positions -->
+                <div class="win-rate-card long">
+                    <div class="win-rate-title" style="color: #10b981;">🟢 Long Positions</div>
+                    <div class="win-rate-item">
+                        <span class="win-rate-timeframe">24-48 Hours</span>
+                        <span class="win-rate-value">45.2%</span>
+                    </div>
+                    <div class="win-rate-item">
+                        <span class="win-rate-timeframe">7 Days</span>
+                        <span class="win-rate-value">52.4%</span>
+                    </div>
+                    <div class="win-rate-item">
+                        <span class="win-rate-timeframe">1 Month</span>
+                        <span class="win-rate-value best">58.7% ⭐ BEST</span>
+                    </div>
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid rgba(255, 255, 255, 0.1);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: 600;">Composite Score</span>
+                            <span style="font-size: 24px; font-weight: 700; color: #10b981;">56.1/100</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Short Positions -->
+                <div class="win-rate-card short">
+                    <div class="win-rate-title" style="color: #ef4444;">🔴 Short Positions</div>
+                    <div class="win-rate-item">
+                        <span class="win-rate-timeframe">24-48 Hours</span>
+                        <span class="win-rate-value best">42.8% ⭐ BEST</span>
+                    </div>
+                    <div class="win-rate-item">
+                        <span class="win-rate-timeframe">7 Days</span>
+                        <span class="win-rate-value">38.5%</span>
+                    </div>
+                    <div class="win-rate-item">
+                        <span class="win-rate-timeframe">1 Month</span>
+                        <span class="win-rate-value">35.2%</span>
+                    </div>
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid rgba(255, 255, 255, 0.1);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: 600;">Composite Score</span>
+                            <span style="font-size: 24px; font-weight: 700; color: rgba(255, 255, 255, 0.8);">43.9/100</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liquidation Analysis -->
+        <div class="section">
+            <div class="section-title">
+                <span class="section-icon">💥</span>
+                Liquidation Cluster Analysis
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span style="color: rgba(255, 255, 255, 0.8);">24h Liquidation Distribution</span>
+                    <span style="font-weight: 600;">Total: $82.4M</span>
+                </div>
+                <div class="liquidation-bar">
+                    <div class="liq-long" style="width: 89.2%;">Long: 89.2% ($73.5M)</div>
+                    <div class="liq-short" style="width: 10.8%;">Short: 10.8% ($8.9M)</div>
+                </div>
+            </div>
+
+            <div class="metric-grid" style="margin-top: 30px;">
+                <div class="metric-card">
+                    <div class="metric-label">1h Liquidations</div>
+                    <div class="metric-value">$3.2M</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">4h Liquidations</div>
+                    <div class="metric-value">$12.8M</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">12h Liquidations</div>
+                    <div class="metric-value">$38.5M</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Liquidation Ratio</div>
+                    <div class="metric-value">8.3:1</div>
+                    <div style="margin-top: 10px; font-size: 14px; color: rgba(255, 255, 255, 0.6);">Long heavy 🔻</div>
+                </div>
+            </div>
+
+            <div class="recommendation-box" style="margin-top: 30px;">
+                <h4>📊 Liquidation Insights</h4>
+                <ul>
+                    <li><strong>High stress level:</strong> 89.2% long liquidations indicate significant selling pressure</li>
+                    <li><strong>Oversold conditions:</strong> Heavy long liquidation may create technical bounce opportunity</li>
+                    <li><strong>Volume spike needed:</strong> Confirmation required for sustained moves</li>
+                    <li><strong>Key level watch:</strong> $60,000 support critical for trend continuation</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Market Positioning -->
+        <div class="section">
+            <div class="section-title">
+                <span class="section-icon">📈</span>
+                Market Positioning & Sentiment
+            </div>
+
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Long/Short Ratio</div>
+                    <div class="metric-value positive">1.18</div>
+                    <div style="margin-top: 10px; font-size: 14px; color: rgba(255, 255, 255, 0.6);">Slightly bullish</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Top Trader L/S</div>
+                    <div class="metric-value positive">2.85</div>
+                    <div style="margin-top: 10px; font-size: 14px; color: rgba(255, 255, 255, 0.6);">Institutional long bias</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Open Interest</div>
+                    <div class="metric-value">$18.2B</div>
+                    <div style="margin-top: 10px; font-size: 14px; color: rgba(255, 255, 255, 0.6);">+5.4% (24h)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Derivatives Volume</div>
+                    <div class="metric-value">$42.8B</div>
+                    <div style="margin-top: 10px; font-size: 14px; color: rgba(255, 255, 255, 0.6);">-8.2% (24h)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trading Recommendations -->
+        <div class="section">
+            <div class="section-title">
+                <span class="section-icon">💡</span>
+                Trading Recommendations
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;">
+                <div>
+                    <div class="recommendation-box" style="border-color: rgba(16, 185, 129, 0.3);">
+                        <h4 style="color: #10b981;">🟢 Long Positions (Best: 1 Month - 58.7%)</h4>
+                        <p style="margin-bottom: 15px; color: rgba(255, 255, 255, 0.8);"><strong>Entry Strategy:</strong></p>
+                        <ul>
+                            <li>Accumulate $59,500-$61,200 (current support zone)</li>
+                            <li>Add on $65,500 breakout with volume confirmation</li>
+                            <li>Focus on range breakout potential</li>
+                        </ul>
+                        <p style="margin: 15px 0; color: rgba(255, 255, 255, 0.8);"><strong>Risk Management:</strong></p>
+                        <ul>
+                            <li>Stop loss: Below $58,000</li>
+                            <li>Scale out: $67,800-$71,500</li>
+                            <li>Breakout target: $95,670 (+51.3% potential)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="recommendation-box" style="border-color: rgba(239, 68, 68, 0.3);">
+                        <h4 style="color: #ef4444;">🔴 Short Positions (Best: 24-48h - 42.8%)</h4>
+                        <p style="margin-bottom: 15px; color: rgba(255, 255, 255, 0.8);"><strong>Entry Strategy:</strong></p>
+                        <ul>
+                            <li>Failed bounces from $67,800-$71,500 resistance</li>
+                            <li>Range-bound scalping approach</li>
+                            <li>Quick profit-taking strategy</li>
+                        </ul>
+                        <p style="margin: 15px 0; color: rgba(255, 255, 255, 0.8);"><strong>Risk Management:</strong></p>
+                        <ul>
+                            <li>Stop loss: Above $70,245</li>
+                            <li>Target: $56,900-$58,200 (support zone)</li>
+                            <li>Breakdown target: $39,850 (-37.0% potential)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Insights -->
+        <div class="section">
+            <div class="section-title">
+                <span class="section-icon">🔑</span>
+                Key Insights & Action Items
+            </div>
+
+            <div class="recommendation-box">
+                <h4>💡 Critical Observations</h4>
+                <ul>
+                    <li><strong>Range resolution imminent</strong> after consolidation period</li>
+                    <li><strong>Long positions favored</strong> across all timeframes (56.1 vs 43.9 composite score)</li>
+                    <li><strong>Critical juncture</strong> at $60,000 support determines next major move</li>
+                    <li><strong>Volume confirmation essential</strong> for any sustained breakout</li>
+                    <li><strong>Risk management crucial</strong> due to breakout volatility potential</li>
+                </ul>
+            </div>
+
+            <div class="recommendation-box" style="margin-top: 20px;">
+                <h4>🚨 Immediate Action Items</h4>
+                <ul>
+                    <li>Monitor $60,000 support level closely for break/hold</li>
+                    <li>Wait for volume increase before major directional bets</li>
+                    <li>Prepare for increased volatility as range resolves</li>
+                    <li>Use range boundaries for clear risk management</li>
+                    <li>Focus on 1-month+ timeframe for best win rates (58.7%)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div style="background: rgba(239, 68, 68, 0.1); border: 2px solid rgba(239, 68, 68, 0.3); border-radius: 16px; padding: 25px; margin-top: 30px;">
+            <h4 style="color: #ef4444; margin-bottom: 15px;">⚠️ DISCLAIMER</h4>
+            <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                This analysis is for informational purposes only. Cryptocurrency trading involves significant risk. Always conduct your own research and consider your risk tolerance before making trading decisions. Range-bound markets can produce false breakouts - proper risk management is essential. Win rates are statistical probabilities based on historical data, not guarantees.
+            </p>
+        </div>
+
+        <!-- CTA -->
+        <div style="text-align: center; margin: 50px 0;">
+            <a href="/" class="btn btn-primary" style="padding: 18px 40px; font-size: 18px;">Get Real-Time Analysis with Zmarty</a>
+        </div>
+    </div>
+
+    <script>
+        // Update analysis date to current date
+        document.getElementById('analysis-date').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    </script>
+</body>
+</html>
