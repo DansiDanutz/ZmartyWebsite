@@ -711,6 +711,58 @@ section {
     font-style: italic;
 }
 
+/* Typewriter Effect */
+.typewriter-text {
+    display: inline-block;
+    overflow: hidden;
+    border-right: 3px solid #667eea;
+    white-space: nowrap;
+    animation: typing 8s steps(200, end), blink-caret 0.75s step-end infinite;
+    animation-fill-mode: forwards;
+    max-width: 100%;
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes blink-caret {
+    from, to {
+        border-color: transparent;
+    }
+    50% {
+        border-color: #667eea;
+    }
+}
+
+/* Remove caret after typing completes */
+@media (min-width: 769px) {
+    .typewriter-text {
+        animation: typing 8s steps(200, end), blink-caret 0.75s step-end 8s 10, remove-caret 0s 15.5s forwards;
+    }
+}
+
+@keyframes remove-caret {
+    to {
+        border-right: none;
+    }
+}
+
+/* Mobile: show full text without typewriter */
+@media (max-width: 768px) {
+    .typewriter-text {
+        animation: none;
+        border-right: none;
+        white-space: normal;
+        width: 100%;
+    }
+}
+
 /* Pricing */
 .pricing {
     background: var(--bg-secondary);
