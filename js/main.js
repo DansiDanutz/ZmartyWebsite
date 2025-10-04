@@ -42,13 +42,15 @@ if (mobileMenuToggle) {
 
 // Close mobile menu when clicking outside
 document.addEventListener('click', (e) => {
-    if (!e.target.closest('.nav-wrapper')) {
+    if (!e.target.closest('.nav-wrapper') && navLinks && mobileMenuToggle) {
         navLinks.classList.remove('active');
         mobileMenuToggle.classList.remove('active');
         const spans = mobileMenuToggle.querySelectorAll('span');
-        spans[0].style.transform = '';
-        spans[1].style.opacity = '';
-        spans[2].style.transform = '';
+        if (spans.length >= 3) {
+            spans[0].style.transform = '';
+            spans[1].style.opacity = '';
+            spans[2].style.transform = '';
+        }
     }
 });
 
