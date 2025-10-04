@@ -325,6 +325,34 @@ const throttle = (func, limit) => {
     };
 };
 
+// Enhanced Reviews Animation
+const initReviewsAnimation = () => {
+    const reviewsContainer = document.querySelector('.reviews-scroll');
+    if (!reviewsContainer) return;
+
+    // Ensure smooth infinite scrolling
+    const reviewCards = reviewsContainer.querySelectorAll('.review-card');
+    const totalCards = reviewCards.length;
+    
+    // The current setup should work with CSS animation
+    // But we can add additional enhancements
+    reviewsContainer.addEventListener('animationend', () => {
+        // This shouldn't fire with infinite animation, but good to have as fallback
+        reviewsContainer.style.transform = 'translateX(0)';
+    });
+
+    // Optional: Add pause on individual card hover for better UX
+    reviewCards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            reviewsContainer.style.animationPlayState = 'paused';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            reviewsContainer.style.animationPlayState = 'running';
+        });
+    });
+};
+
 // Console message for developers
 console.log(
     '%c🤖 Zmarty.me - Built with ❤️',
@@ -341,4 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add loaded class to body for CSS animations
     document.body.classList.add('loaded');
+    
+    // Initialize enhanced reviews animation
+    initReviewsAnimation();
 });

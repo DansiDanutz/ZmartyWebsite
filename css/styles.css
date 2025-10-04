@@ -1094,7 +1094,7 @@ section {
     display: flex;
     flex-direction: row;
     gap: 30px;
-    animation: scrollLeft 60s linear infinite;
+    animation: scrollLeft 45s linear infinite;
     width: max-content;
 }
 
