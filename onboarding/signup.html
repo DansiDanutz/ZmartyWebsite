@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="../js/supabase-config.js"></script>
     <style>
         .onboarding-container {
             min-height: 100vh;
@@ -320,11 +321,7 @@
     </div>
 
     <script>
-        // Supabase Configuration
-        const SUPABASE_URL = 'https://xhskmqsgtdhehzlvtuns.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhoc2ttcXNndGRoZWh6bHZ0dW5zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNDkzNTQsImV4cCI6MjA3MzcyNTM1NH0.ULAf9vNHS4nasSnv9UOKS2MCKsSxcMtV3C-R7Wm6qMw';
-
-        // Initialize Supabase client (will be set after library loads)
+        // Supabase client (will be initialized from serverless function)
         let supabaseClient = null;
 
         // Form validation
@@ -500,49 +497,11 @@
             }
         }
 
-        // Load Supabase script with timeout and fallback
-        function initializeSupabase() {
-            return new Promise((resolve, reject) => {
-                if (window.supabase) {
-                    const { createClient } = supabase;
-                    supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    console.log('Supabase initialized successfully');
-                    resolve();
-                    return;
-                }
-
-                const script = document.createElement('script');
-                script.src = 'https://unpkg.com/@supabase/supabase-js@2';
-
-                let timeoutId = setTimeout(() => {
-                    reject(new Error('Supabase loading timeout'));
-                }, 10000); // 10 second timeout
-
-                script.onload = () => {
-                    clearTimeout(timeoutId);
-                    if (window.supabase) {
-                        const { createClient } = supabase;
-                        supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                        console.log('Supabase loaded and initialized successfully');
-                        resolve();
-                    } else {
-                        reject(new Error('Supabase library not available'));
-                    }
-                };
-
-                script.onerror = () => {
-                    clearTimeout(timeoutId);
-                    reject(new Error('Failed to load Supabase library'));
-                };
-
-                document.head.appendChild(script);
-            });
-        }
-
-        // Initialize on page load
+        // Initialize on page load using secure config loader
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                await initializeSupabase();
+                // Initialize Supabase from serverless function (credentials not visible in source)
+                supabaseClient = await window.initializeSupabaseClient();
             } catch (error) {
                 console.error('Supabase initialization error:', error);
                 showError('Failed to load authentication service. Please refresh the page.');

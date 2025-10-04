@@ -4,6 +4,7 @@
 [build]
   # No build command needed - static HTML/CSS/JS
   publish = "."
+  functions = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "18"
@@ -12,6 +13,26 @@
 [[redirects]]
   from = "/blog"
   to = "/blog/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/onboarding/signup"
+  to = "/onboarding/signup.html"
+  status = 200
+
+[[redirects]]
+  from = "/onboarding/signin"
+  to = "/onboarding/signin.html"
+  status = 200
+
+[[redirects]]
+  from = "/onboarding/verify"
+  to = "/onboarding/verify.html"
+  status = 200
+
+[[redirects]]
+  from = "/onboarding/welcome"
+  to = "/onboarding/welcome.html"
   status = 200
 
 [[redirects]]
@@ -48,6 +69,15 @@
   for = "/index.html"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
+
+# Serverless Functions Configuration
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type"
 
 # Custom domain configuration (update after purchasing zmarty.me)
 # [[redirects]]
