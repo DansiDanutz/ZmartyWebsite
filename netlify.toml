@@ -11,6 +11,24 @@
 
 # Redirects and rewrites
 [[redirects]]
+  from = "/intro"
+  to = "https://zmarty.netlify.app/intro"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/auth/*"
+  to = "https://zmarty.netlify.app/auth/:splat"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/get-started"
+  to = "https://zmarty.netlify.app/intro"
+  status = 302
+  force = true
+
+[[redirects]]
   from = "/blog"
   to = "/blog/index.html"
   status = 200

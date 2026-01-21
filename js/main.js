@@ -269,6 +269,32 @@ const throttle = (func, limit) => {
     };
 };
 
+// Onboarding routing
+// When a user clicks "Get Started" anywhere, send them into the real onboarding app.
+const ONBOARDING_URL = 'https://zmarty.netlify.app/intro';
+
+function wireOnboardingRedirects() {
+    // Pricing cards + CTA section buttons
+    const selectors = [
+        '.btn-pricing',
+        '.cta-buttons .btn-hero-primary',
+        '.cta-buttons .btn-hero-secondary',
+        'button.btn-hero-primary',
+        'button.btn-hero-secondary'
+    ];
+
+    selectors.forEach((sel) => {
+        document.querySelectorAll(sel).forEach((el) => {
+            el.addEventListener('click', (e) => {
+                // If it's already a link, let the href win.
+                if (el.tagName && el.tagName.toLowerCase() === 'a') return;
+                e.preventDefault();
+                window.location.href = ONBOARDING_URL;
+            });
+        });
+    });
+}
+
 // Console message for developers
 console.log(
     '%c🤖 Zmarty.me - Built with ❤️',
@@ -285,4 +311,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add loaded class to body for CSS animations
     document.body.classList.add('loaded');
+
+    wireOnboardingRedirects();
 });
