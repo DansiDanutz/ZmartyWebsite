@@ -270,8 +270,20 @@ const throttle = (func, limit) => {
 };
 
 // Onboarding routing
-// When a user clicks "Get Started" anywhere, send them into the real onboarding app.
-const ONBOARDING_URL = 'https://zmarty.netlify.app/intro';
+// When a user clicks "Get Started" anywhere, send them into the onboarding flow.
+const ONBOARDING_URL = '/onboarding/signup';
+
+function resolveOnboardingUrl() {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const app = params.get('app') || params.get('app_base');
+        if (!app) return ONBOARDING_URL;
+        const sep = ONBOARDING_URL.includes('?') ? '&' : '?';
+        return `${ONBOARDING_URL}${sep}app=${encodeURIComponent(app)}`;
+    } catch {
+        return ONBOARDING_URL;
+    }
+}
 
 function wireOnboardingRedirects() {
     // Pricing cards + CTA section buttons
@@ -289,9 +301,16 @@ function wireOnboardingRedirects() {
                 // If it's already a link, let the href win.
                 if (el.tagName && el.tagName.toLowerCase() === 'a') return;
                 e.preventDefault();
-                window.location.href = ONBOARDING_URL;
+                window.location.href = resolveOnboardingUrl();
             });
         });
+    });
+
+    // Update anchor CTAs to preserve app selection query param (if present)
+    document.querySelectorAll('a.btn-primary, a.btn-hero-primary').forEach((el) => {
+        const href = el.getAttribute('href');
+        if (!href || href.startsWith('#')) return;
+        el.setAttribute('href', resolveOnboardingUrl());
     });
 }
 

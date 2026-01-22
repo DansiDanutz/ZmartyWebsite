@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="../js/supabase-config.js"></script>
+    <script src="../js/onboarding-handoff.js"></script>
     <style>
         .onboarding-container {
             min-height: 100vh;
@@ -312,7 +313,15 @@
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', async function() {
-            await loadUserInfo();
+            try {
+                window.ZmartyOnboarding.applyAppQueryToLinks();
+                // Initialize Supabase before loading user info
+                supabaseClient = await window.initializeSupabaseClient();
+                await loadUserInfo();
+            } catch (error) {
+                console.error('Supabase initialization error:', error);
+                window.location.href = window.ZmartyOnboarding.withAppQuery('/onboarding/signup');
+            }
         });
 
         // Load user information
@@ -320,7 +329,7 @@
             // Check if Supabase is ready
             if (!supabaseClient) {
                 console.error('Supabase client not initialized');
-                window.location.href = '/onboarding/signup';
+                window.location.href = window.ZmartyOnboarding.withAppQuery('/onboarding/signup');
                 return;
             }
 
@@ -330,7 +339,7 @@
                 if (error) {
                     console.error('Error getting user:', error);
                     // Redirect to signup if no user
-                    window.location.href = '/onboarding/signup';
+                    window.location.href = window.ZmartyOnboarding.withAppQuery('/onboarding/signup');
                     return;
                 }
 
@@ -344,14 +353,20 @@
                     document.getElementById('user-avatar').textContent = fullName.charAt(0).toUpperCase();
                     
                     showSuccess('Welcome! Your account has been successfully verified.');
+                    const { data } = await supabaseClient.auth.getSession();
+                    if (data?.session) {
+                        setTimeout(() => {
+                            window.ZmartyOnboarding.redirectToApp(data.session);
+                        }, 1500);
+                    }
                 } else {
                     // No user found, redirect to signup
-                    window.location.href = '/onboarding/signup';
+                    window.location.href = window.ZmartyOnboarding.withAppQuery('/onboarding/signup');
                 }
                 
             } catch (error) {
                 console.error('Error loading user info:', error);
-                window.location.href = '/onboarding/signup';
+                window.location.href = window.ZmartyOnboarding.withAppQuery('/onboarding/signup');
             }
         }
 
@@ -380,28 +395,24 @@
             setLoading(true);
             
             // Simulate loading time
-            setTimeout(() => {
-                window.location.href = '/dashboard';
-            }, 1000);
+            supabaseClient.auth.getSession().then(({ data }) => {
+                setTimeout(() => {
+                    window.ZmartyOnboarding.redirectToApp(data?.session);
+                }, 800);
+            }).catch(() => {
+                window.ZmartyOnboarding.redirectToApp(null);
+            });
         }
 
         function completeProfile() {
-            // For now, redirect to dashboard
-            // In the future, this could redirect to a profile completion page
-            window.location.href = '/dashboard?setup=profile';
+            supabaseClient.auth.getSession().then(({ data }) => {
+                window.ZmartyOnboarding.redirectToApp(data?.session, { fallbackPath: '/profile?mode=register' });
+            }).catch(() => {
+                window.ZmartyOnboarding.redirectToApp(null, { fallbackPath: '/profile?mode=register' });
+            });
         }
 
-        // Initialize on page load using secure config loader
-        (async function() {
-            try {
-                // Initialize Supabase from serverless function (credentials not visible in source)
-                supabaseClient = await window.initializeSupabaseClient();
-            } catch (error) {
-                console.error('Supabase initialization error:', error);
-                // Redirect to signup if Supabase fails to load
-                window.location.href = '/onboarding/signup';
-            }
-        })();
+        // Supabase init handled in DOMContentLoaded to avoid race conditions.
     </script>
 </body>
 </html>

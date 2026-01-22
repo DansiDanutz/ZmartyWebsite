@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="../js/supabase-config.js"></script>
+    <script src="../js/onboarding-handoff.js"></script>
     <style>
         .onboarding-container {
             min-height: 100vh;
@@ -408,11 +409,11 @@
                 }
 
                 if (data.user) {
-                    showSuccess('Signed in successfully! Redirecting to dashboard...');
-                    
+                    showSuccess('Signed in successfully! Redirecting to the app...');
+                    const session = data.session || (await supabaseClient.auth.getSession()).data?.session;
                     setTimeout(() => {
-                        window.location.href = '/dashboard';
-                    }, 2000);
+                        window.ZmartyOnboarding.redirectToApp(session);
+                    }, 1200);
                 }
                 
             } catch (error) {
@@ -442,7 +443,7 @@
                 const { data, error } = await supabaseClient.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
-                        redirectTo: window.location.origin + '/dashboard'
+                        redirectTo: window.ZmartyOnboarding.getOAuthRedirect()
                     }
                 });
 
@@ -458,6 +459,7 @@
         // Initialize on page load using secure config loader
         document.addEventListener('DOMContentLoaded', async () => {
             try {
+                window.ZmartyOnboarding.applyAppQueryToLinks();
                 // Initialize Supabase from serverless function (credentials not visible in source)
                 supabaseClient = await window.initializeSupabaseClient();
             } catch (error) {

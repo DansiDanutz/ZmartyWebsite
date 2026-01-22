@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="../js/supabase-config.js"></script>
+    <script src="../js/onboarding-handoff.js"></script>
     <style>
         .onboarding-container {
             min-height: 100vh;
@@ -302,12 +303,13 @@
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
+            window.ZmartyOnboarding.applyAppQueryToLinks();
             const pendingEmail = sessionStorage.getItem('pending_email');
             if (pendingEmail) {
                 document.getElementById('email-display').textContent = pendingEmail;
             } else {
                 // If no pending email, redirect to signup
-                window.location.href = '/onboarding/signup';
+                window.location.href = window.ZmartyOnboarding.withAppQuery('/onboarding/signup');
             }
             
             // Start resend countdown
@@ -424,16 +426,16 @@
                     throw error;
                 }
 
-                showSuccess('Email verified successfully! Redirecting to welcome page...');
+                showSuccess('Email verified successfully! Redirecting to the app...');
                 
                 // Clear pending data
                 sessionStorage.removeItem('pending_email');
                 sessionStorage.removeItem('pending_name');
                 
-                // Redirect to welcome page
+                const session = data.session || (await supabaseClient.auth.getSession()).data?.session;
                 setTimeout(() => {
-                    window.location.href = '/onboarding/welcome';
-                }, 2000);
+                    window.ZmartyOnboarding.redirectToApp(session);
+                }, 1500);
                 
             } catch (error) {
                 console.error('Verification error:', error);

@@ -12,19 +12,19 @@
 # Redirects and rewrites
 [[redirects]]
   from = "/intro"
-  to = "https://zmarty.netlify.app/intro"
+  to = "/onboarding/signup"
   status = 302
   force = true
 
 [[redirects]]
   from = "/auth/*"
-  to = "https://zmarty.netlify.app/auth/:splat"
+  to = "https://app.zmarty.me/auth/:splat"
   status = 302
   force = true
 
 [[redirects]]
   from = "/get-started"
-  to = "https://zmarty.netlify.app/intro"
+  to = "/onboarding/signup"
   status = 302
   force = true
 

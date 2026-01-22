@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="../js/supabase-config.js"></script>
+    <script src="../js/onboarding-handoff.js"></script>
     <style>
         .onboarding-container {
             min-height: 100vh;
@@ -424,11 +425,12 @@
 
             try {
                 // Create user account
+                const verifyRedirect = window.ZmartyOnboarding.withAppQuery(window.location.origin + '/onboarding/verify');
                 const { data, error } = await supabaseClient.auth.signUp({
                     email: email,
                     password: password,
                     options: {
-                        emailRedirectTo: window.location.origin + '/onboarding/verify',
+                        emailRedirectTo: verifyRedirect,
                         data: {
                             full_name: fullName,
                             source: 'website_signup',
@@ -450,13 +452,14 @@
                     
                     // Redirect to verification page after 3 seconds
                     setTimeout(() => {
-                        window.location.href = '/onboarding/verify';
+                        window.location.href = window.ZmartyOnboarding.withAppQuery('/onboarding/verify');
                     }, 3000);
                 } else if (data.user && data.user.email_confirmed_at) {
-                    showSuccess('Account created successfully! Redirecting to dashboard...');
+                    showSuccess('Account created successfully! Redirecting to the app...');
+                    const session = data.session || (await supabaseClient.auth.getSession()).data?.session;
                     setTimeout(() => {
-                        window.location.href = '/dashboard';
-                    }, 2000);
+                        window.ZmartyOnboarding.redirectToApp(session);
+                    }, 1200);
                 }
                 
             } catch (error) {
@@ -484,7 +487,7 @@
                 const { data, error } = await supabaseClient.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
-                        redirectTo: window.location.origin + '/onboarding/welcome'
+                        redirectTo: window.ZmartyOnboarding.getOAuthRedirect()
                     }
                 });
 
@@ -500,6 +503,7 @@
         // Initialize on page load using secure config loader
         document.addEventListener('DOMContentLoaded', async () => {
             try {
+                window.ZmartyOnboarding.applyAppQueryToLinks();
                 // Initialize Supabase from serverless function (credentials not visible in source)
                 supabaseClient = await window.initializeSupabaseClient();
             } catch (error) {
