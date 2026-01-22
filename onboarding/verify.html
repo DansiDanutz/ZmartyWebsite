@@ -299,7 +299,7 @@
         let supabaseClient = null;
 
         let resendTimer = null;
-        let resendCountdown = 60;
+        let resendCountdownSeconds = 60;
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
@@ -481,23 +481,24 @@
         function startResendCountdown() {
             const resendBtn = document.getElementById('resend-btn');
             const resendText = document.getElementById('resend-text');
-            const resendCountdown = document.getElementById('resend-countdown');
+            const resendCountdownEl = document.getElementById('resend-countdown');
+            let remaining = resendCountdownSeconds;
             
             resendBtn.disabled = true;
             resendText.style.display = 'none';
-            resendCountdown.style.display = 'inline';
-            resendCountdown.textContent = `Resend in ${resendCountdown} seconds`;
+            resendCountdownEl.style.display = 'inline';
+            resendCountdownEl.textContent = `Resend in ${remaining} seconds`;
             
             resendTimer = setInterval(() => {
-                resendCountdown--;
-                resendCountdown.textContent = `Resend in ${resendCountdown} seconds`;
+                remaining -= 1;
+                resendCountdownEl.textContent = `Resend in ${remaining} seconds`;
                 
-                if (resendCountdown <= 0) {
+                if (remaining <= 0) {
                     clearInterval(resendTimer);
                     resendBtn.disabled = false;
                     resendText.style.display = 'inline';
-                    resendCountdown.style.display = 'none';
-                    resendCountdown = 60; // Reset for next time
+                    resendCountdownEl.style.display = 'none';
+                    remaining = resendCountdownSeconds; // Reset for next time
                 }
             }, 1000);
         }
